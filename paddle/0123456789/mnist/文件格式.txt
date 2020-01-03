@@ -1,0 +1,6 @@
+训练集包含6万个示例
+训练集图像：train-images-idx3-ubyte
+训练集标签：train-labels-idx1-ubyte
+测试集包含1万个示例
+测试集图像：t10k-images-idx3-ubyte
+测试集标签：t10k-labels-idx1-ubyte
