@@ -51,7 +51,7 @@ for i in range(500):
         print('iter={:.0f},cost={}'.format(i,outs[1][0]))
         
 # 存储训练结果
-params_dirname = 'result'
+params_dirname = 'model'
 fluid.io.save_inference_model(params_dirname,['x'],[y_predict],exe)
 
 # 开始预测

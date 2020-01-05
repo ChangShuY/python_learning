@@ -43,7 +43,7 @@ y_predict = fluid.layers.fc(input=x,size=1,act=None)
 #定义标签
 y_true = numpy.array([[2.0],[4.0],[6.0],[8.0]]).astype('float32') # y的取值
 #输入层
-y = fluid.layers.data(name="y",shape=[1],dtype='float32') #原文为 fluid.layers.data
+y = fluid.data(name="y",shape=[-1,1],dtype='float32') #原文为 fluid.layers.data
 #定义损失函数,评估预测结果的好坏
 cost = fluid.layers.square_error_cost(input=y_predict,label=y) # 采用方差函数
 avg_cost = fluid.layers.mean(cost) # 采用方差函数
@@ -65,7 +65,7 @@ for i in range(100):
 print(outs)
 
 # 存储训练后的模型
-params_dirname = 'Model4ax'
+params_dirname = 'model'
 fluid.io.save_inference_model(
     params_dirname, # dirname: 保存预测模型的文件夹
     ['x'], # feeded_var_names: 预测时所需提供数据的所有输入变量的名称
