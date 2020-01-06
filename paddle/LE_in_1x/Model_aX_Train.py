@@ -35,8 +35,8 @@ train_data=numpy.array([[1.0],[2.0],[3.0],[4.0]]).astype('float32') # x的取值
 
 #定义仅有正向传播的预测网络
 #输入层
-#x = fluid.data(name="x",shape=[-1,1],dtype='float32') #原文为 fluid.layers.data
-x = fluid.layers.data(name="x",shape=[1],dtype='float32') #原文为 fluid.layers.data
+x = fluid.data(name="x",shape=[-1,1],dtype='float32') #原文为 fluid.layers.data
+#x = fluid.layers.data(name="x",shape=[1],dtype='float32') #原文为 fluid.layers.data
 #全连接层
 y_predict = fluid.layers.fc(input=x,size=1,act=None)
 
@@ -44,8 +44,8 @@ y_predict = fluid.layers.fc(input=x,size=1,act=None)
 #定义标签
 y_true = numpy.array([[2.0],[4.0],[6.0],[8.0]]).astype('float32') # y的取值
 #输入层
-#y = fluid.data(name="y",shape=[-1,1],dtype='float32') #原文为 fluid.layers.data
-y = fluid.layers.data(name="y",shape=[1],dtype='float32') #原文为 fluid.layers.data
+y = fluid.data(name="y",shape=[-1,1],dtype='float32') #原文为 fluid.layers.data
+#y = fluid.layers.data(name="y",shape=[1],dtype='float32') #原文为 fluid.layers.data
 #定义损失函数,评估预测结果的好坏
 cost = fluid.layers.square_error_cost(input=y_predict,label=y) # 采用方差函数
 avg_cost = fluid.layers.mean(cost) # 采用方差函数

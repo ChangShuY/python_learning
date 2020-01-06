@@ -29,18 +29,19 @@ infer_exe         -- 运行模型的执行器
 params_dirname = 'model'
 with fluid.scope_guard(inference_scope):
     [inference_program,feed_target_names,fetch_targets] =  fluid.io.load_inference_model(params_dirname, infer_exe)
+#inference_program,feed_target_names,fetch_targets =  fluid.io.load_inference_model(params_dirname, infer_exe)
 
 # 生成测试数据, 模型的输入层设计为只接收float32
 group = 4
-#x_test = numpy.random.uniform(0,10.0,size=(group,1)) #生成8个不同的a, a>=0且a<10, a的类型float64 
-#x_test = x_test.astype(numpy.float32) # 转换成float32
-x_test = numpy.array([[1.0],[2.0],[3.0],[4.0]]).astype('float32') # x的取值
+x_test = numpy.random.uniform(0,10.0,size=(group,1)) #生成8个不同的a, a>=0且a<10, a的类型float64 
+x_test = x_test.astype(numpy.float32) # 转换成float32
+#x_test = numpy.array([[1.0],[2.0],[3.0],[4.0]]).astype('float32') # x的取值
 
 # 进行预测
 results = infer_exe.run(inference_program,
                         feed={'x':x_test},
                         fetch_list=fetch_targets)
-                        #fetch_list=[y_predict.name])
+
 # 显示答案
 for i in range(group):
-    print("当x={x}时，预测结果为y={y}".format(x=x_test[i][0],y=results[i][0]))
+    print("当x={x}时，预测结果为y={y}".format(x=x_test[i][0],y=results[0][i]))
