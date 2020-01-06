@@ -11,14 +11,14 @@
 import paddle.fluid as fluid
 import numpy
 
-# 定义执行器
+# 定义执行器和作用域
 cpu = fluid.CPUPlace()
 infer_exe = fluid.Executor(cpu) # 在cpu上运行
 inference_scope = fluid.Scope() # 获取作用域变量
 
 # 加载训练好的模型
 '''
-返回
+返回fetch_list=
 inference_program -- load_inference_model 返回的预测Program
 feed_target_names -- load_inference_model 返回的所有输入变量的名称
 fetch_targets     -- load_inference_model 返回的输出变量
@@ -30,15 +30,17 @@ params_dirname = 'model'
 with fluid.scope_guard(inference_scope):
     [inference_program,feed_target_names,fetch_targets] =  fluid.io.load_inference_model(params_dirname, infer_exe)
 
-# 生成测试数据
-x_test = numpy.random.uniform(0,10.0,size=(10,1))  #生成5行1列的小于10的随机浮点数 
-x_test = x_test.astype(numpy.float32)
-#x_test = numpy.array([[1.0],[2.0],[3.0],[4.0]]).astype('float32') # x的取值
+# 生成测试数据, 模型的输入层设计为只接收float32
+group = 4
+#x_test = numpy.random.uniform(0,10.0,size=(group,1)) #生成8个不同的a, a>=0且a<10, a的类型float64 
+#x_test = x_test.astype(numpy.float32) # 转换成float32
+x_test = numpy.array([[1.0],[2.0],[3.0],[4.0]]).astype('float32') # x的取值
 
 # 进行预测
 results = infer_exe.run(inference_program,
                         feed={'x':x_test},
                         fetch_list=fetch_targets)
-
-# 给出答案
-print("当变量为{x}时，预测结果为{y}".format(x=x_test,y=results))
+                        #fetch_list=[y_predict.name])
+# 显示答案
+for i in range(group):
+    print("当x={x}时，预测结果为y={y}".format(x=x_test[i][0],y=results[i][0]))
