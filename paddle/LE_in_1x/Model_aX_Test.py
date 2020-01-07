@@ -11,10 +11,10 @@
 import paddle.fluid as fluid
 import numpy
 
-# 定义执行器和作用域
+# 定义执行器
 cpu = fluid.CPUPlace()
 infer_exe = fluid.Executor(cpu) # 在cpu上运行
-inference_scope = fluid.Scope() # 获取作用域变量
+
 
 # 加载训练好的模型
 '''
@@ -26,14 +26,21 @@ fetch_targets     -- load_inference_model 返回的输出变量
 params_dirname    -- 待加载模型的存储路径 
 infer_exe         -- 运行模型的执行器
 '''
-params_dirname = 'model'
-with fluid.scope_guard(inference_scope):
-    [inference_program,feed_target_names,fetch_targets] =  fluid.io.load_inference_model(params_dirname, infer_exe)
-#inference_program,feed_target_names,fetch_targets =  fluid.io.load_inference_model(params_dirname, infer_exe)
+params_dirname = 'model' # 存储模型的目录
+'''
+使用下面被屏蔽的语句时：
+在jupyter notebook上用%run Model_aX_Test.py 运行通过。
+在命令行用 python Model_aX_Test.py 运行出错
+'''
+#inference_scope = fluid.Scope() # 获取作用域变量
+#with fluid.scope_guard(inference_scope):
+#    [inference_program,feed_target_names,fetch_targets] =  fluid.io.load_inference_model(params_dirname, infer_exe)
+#只好用已下语句代替
+inference_program,feed_target_names,fetch_targets =  fluid.io.load_inference_model(params_dirname, infer_exe)
 
 # 生成测试数据, 模型的输入层设计为只接收float32
-group = 4
-x_test = numpy.random.uniform(0,10.0,size=(group,1)) #生成8个不同的a, a>=0且a<10, a的类型float64 
+group = 20
+x_test = numpy.random.uniform(0,10.0,size=(group,1)) #生成group个不同的a, a>=0且a<10, a的类型float64 
 x_test = x_test.astype(numpy.float32) # 转换成float32
 #x_test = numpy.array([[1.0],[2.0],[3.0],[4.0]]).astype('float32') # x的取值
 

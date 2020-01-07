@@ -51,7 +51,7 @@ for i in range(500):
         print('iter={:.0f},cost={}'.format(i,outs[1][0]))
         
 # 存储训练结果
-params_dirname = 'model'
+params_dirname = "result"
 fluid.io.save_inference_model(params_dirname,['x'],[y_predict],exe)
 
 # 开始预测
@@ -71,5 +71,5 @@ results = infer_exe.run(inference_program,
                         feed={'x':test},
                         fetch_list=fetch_targets)
 
-# 给出答案：
-print("当变量为[9,5,2,10]时，预测结果为{}".format(result[0][0]))
+# 给出题目为 【9,5,2,10】 输出y=4*9+6*5+7*2+10*2的值
+print ("9a+5b+2c+10d={}".format(results[0][0]))
