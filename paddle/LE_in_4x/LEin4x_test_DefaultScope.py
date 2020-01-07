@@ -3,8 +3,8 @@
 
 #一个求解4元一次方程的线性回归模型
 # Linear Equation In Four Unknowns
-# csy 2020-1-7 在新的作用域下运行加载的模型
-# 改编于百度飞浆网站 https://www.paddlepaddle.org.cn/documentation/docs/zh/beginners_guide/quick_start_cn.html#id5
+# csy 2020-1-7 使用默认作用域
+# 抄录于百度飞浆网站 https://www.paddlepaddle.org.cn/documentation/docs/zh/beginners_guide/quick_start_cn.html#id5
 
 #加载库
 import paddle.fluid as fluid
@@ -18,7 +18,8 @@ inference_scope = fluid.Scope()
 # 加载训练好的模型
 params_dirname = 'result'
 with fluid.scope_guard(inference_scope):
-    [inference_program,feed_target_names,fetch_targets] = fluid.io.load_inference_model(params_dirname,infer_exe)
+    [inference_program,feed_target_names,
+     fetch_targets] = fluid.io.load_inference_model(params_dirname,infer_exe)
     
     # 生成测试数据
     test = np.array([[[9],[5],[2],[10]]]).astype('float32')
