@@ -16,13 +16,13 @@ infer_exe = fluid.Executor(cpu)
 inference_scope = fluid.Scope()
 
 # 加载训练好的模型
-params_dirname = 'result'
+params_dirname = 'model'
 with fluid.scope_guard(inference_scope):
     [inference_program,feed_target_names,
      fetch_targets] = fluid.io.load_inference_model(params_dirname,infer_exe)
     
     # 生成测试数据
-    test = np.array([[[9],[5],[2],[10]]]).astype('float32')
+    test = np.array([[9,5,2,10]]).astype('float32')
 
     # 进行预测
     results = infer_exe.run(inference_program,

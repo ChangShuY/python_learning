@@ -4,7 +4,7 @@
 #一个求解4元一次方程的线性回归模型
 # Linear Equation In Four Unknowns
 # csy 2019-10-30
-# 抄录于百度飞浆网站
+# https://www.paddlepaddle.org.cn/documentation/docs/zh/beginners_guide/quick_start_cn.html
 
 #加载库
 import paddle.fluid as fluid
@@ -12,7 +12,7 @@ import numpy as np
 
 #生成数据
 np.random.seed(0)
-outputs = np.random.randint(5,size=(10,4))  #生成10行4列的小于5的随机数
+outputs = np.random.randint(5,size=(10,4))  #生成10行4列的小于5的随机整数
 res = []
 for i in range(10):
     #假设方程式为 y=4a+6b+7c+2d，生成答案

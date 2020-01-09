@@ -40,9 +40,13 @@ inference_program,feed_target_names,fetch_targets =  fluid.io.load_inference_mod
 
 # 生成测试数据, 模型的输入层设计为只接收float32
 group = 20
+# 随机生成group组数据，以下两种方法任选一种
+#x_test = numpy.random.randint(10,size=(group,1))#生成group个不同的a, a>=0且a<10, a的类型int
 x_test = numpy.random.uniform(0,10.0,size=(group,1)) #生成group个不同的a, a>=0且a<10, a的类型float64 
+
+# 以下两种转换方式任选一种
 x_test = x_test.astype(numpy.float32) # 转换成float32
-#x_test = numpy.array([[1.0],[2.0],[3.0],[4.0]]).astype('float32') # x的取值
+#x_test = numpy.array(x_test).astype('float32') # x的取值
 
 # 进行预测
 results = infer_exe.run(inference_program,
