@@ -1,3 +1,26 @@
+'''
+运行环境：Ubuntu19,python3.7.0,paddle1.6.0
+csy 2020-1-10 源于
+https://www.paddlepaddle.org.cn/documentation/docs/zh/beginners_guide/quick_start_cn.html
+
+1.fluid.layers.data 改为 fluid.layers.data
+2.测试数据的shape改为(1,4)
+3.生成的训练数据改为20组
+运行结果：
+iter=0,cost=1878.2529296875
+iter=50,cost=6270566.5
+iter=100,cost=21211248640.0
+iter=150,cost=71750607962112.0
+iter=200,cost=2.4270867061643674e+17
+iter=250,cost=8.210029047386651e+20
+iter=300,cost=2.7771812434181936e+24
+iter=350,cost=9.394261493362e+27
+iter=400,cost=3.1777560548561466e+31
+iter=450,cost=1.0749267084194374e+35
+9a+5b+2c+10d=[-5.5128814e+19]
+
+'''
+
 #加载库
 import paddle.fluid as fluid
 import numpy as np

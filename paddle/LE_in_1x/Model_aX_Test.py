@@ -3,6 +3,9 @@
 
 '''
 文件名：Model_aX_Test.py
+运行环境：Ubuntu19,python3.7.0,paddle1.6.0
+加载当前目录下由 params_dirname 指定的文件夹中的模型，进行预测。
+
 按照 https://www.paddlepaddle.org.cn/documentation/docs/zh/1.5/beginners_guide/programming_guide/programming_guide.html#id2
 训练的模型，输入x，预测出y_predict。
 '''

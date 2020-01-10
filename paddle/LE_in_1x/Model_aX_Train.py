@@ -3,7 +3,10 @@
 
 '''
 文件名：Model_aX_Train.py
+运行环境：UBUNTU19，Python3.7.0,paddle1.6.0
 一个 y=ax 的线性网络的训练过程
+训练后的模型保存在当前目录下由 params_dirname 指定的文件夹中
+
 源自 paddle官网 fluid1.5 的一个代码实例
 https://www.paddlepaddle.org.cn/documentation/docs/zh/1.5/beginners_guide/programming_guide/programming_guide.html#id2
 

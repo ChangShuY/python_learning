@@ -1,13 +1,67 @@
+'''
+运行环境：Ubuntu19,python3.7.0,paddle1.6.0
+csy 2020-1-10 源于
+https://www.paddlepaddle.org.cn/documentation/docs/zh/beginners_guide/quick_start_cn.html
+
+1.fluid.layers.data 改为 fluid.layers.data
+2.测试数据的shape改为(1,4)
+3.生成的训练数据改为30组
+4.生成的x小于10。
+5.增加打印训练数据x,y的语句
+运行结果：
+0: 47=4*5+6*0+7*3+2*3
+1: 113=4*7+6*9+7*3+2*5
+2: 93=4*2+6*4+7*7+2*6
+3: 99=4*8+6*8+7*1+2*6
+4: 128=4*7+6*7+7*8+2*1
+5: 148=4*5+6*9+7*8+2*9
+6: 40=4*4+6*3+7*0+2*3
+7: 40=4*5+6*0+7*2+2*3
+8: 65=4*8+6*1+7*3+2*3
+9: 56=4*3+6*7+7*0+2*1
+10: 98=4*9+6*9+7*0+2*4
+11: 74=4*7+6*3+7*2+2*7
+12: 16=4*2+6*0+7*0+2*4
+13: 108=4*5+6*5+7*6+2*8
+14: 68=4*4+6*1+7*4+2*9
+15: 59=4*8+6*1+7*1+2*7
+16: 123=4*9+6*9+7*3+2*6
+17: 46=4*7+6*2+7*0+2*3
+18: 110=4*5+6*9+7*4+2*4
+19: 82=4*6+6*4+7*4+2*3
+20: 104=4*4+6*4+7*8+2*4
+21: 99=4*3+6*7+7*5+2*5
+22: 59=4*0+6*1+7*5+2*9
+23: 47=4*3+6*0+7*5+2*0
+24: 48=4*1+6*2+7*4+2*2
+25: 32=4*0+6*3+7*2+2*0
+26: 121=4*7+6*5+7*9+2*0
+27: 82=4*2+6*7+7*2+2*9
+28: 51=4*2+6*3+7*3+2*2
+29: 47=4*3+6*4+7*1+2*2
+iter=0,cost=5474.8759765625
+iter=50,cost=nan
+iter=100,cost=nan
+iter=150,cost=nan
+iter=200,cost=nan
+iter=250,cost=nan
+iter=300,cost=nan
+iter=350,cost=nan
+iter=400,cost=nan
+iter=450,cost=nan
+9a+5b+2c+10d=[nan]
+'''
 #加载库
 import paddle.fluid as fluid
 import numpy as np
 #生成数据
 np.random.seed(0)
-outputs = np.random.randint(10, size=(20, 4))
+outputs = np.random.randint(10, size=(30, 4))
 res = []
-for i in range(20):
+for i in range(30):
         # 假设方程式为 y=4a+6b+7c+2d
         y = 4*outputs[i][0]+6*outputs[i][1]+7*outputs[i][2]+2*outputs[i][3]
+        print("{}: {}=4*{}+6*{}+7*{}+2*{}".format(i,y,outputs[i][0],outputs[i][1],outputs[i][2],outputs[i][3]))
         res.append([y])
 # 定义数据
 train_data=np.array(outputs).astype('float32')

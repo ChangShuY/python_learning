@@ -1,3 +1,24 @@
+'''
+运行环境：Ubuntu19,python3.7.0,paddle1.6.0
+csy 2020-1-10 拷贝于
+https://www.paddlepaddle.org.cn/documentation/docs/zh/beginners_guide/quick_start_cn.html
+
+无改动
+
+运行结果：
+iter=0,cost=1067.702880859375
+iter=50,cost=0.11481620371341705
+iter=100,cost=0.04750707000494003
+iter=150,cost=0.01968439295887947
+iter=200,cost=0.008155882358551025
+iter=250,cost=0.0033793789334595203
+iter=300,cost=0.0014002148527652025
+iter=350,cost=0.0005801789229735732
+iter=400,cost=0.00024040136486291885
+iter=450,cost=9.95906739262864e-05
+9a+5b+2c+10d=[99.947624]
+'''
+
 #加载库
 import paddle.fluid as fluid
 import numpy as np

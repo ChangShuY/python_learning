@@ -1,15 +1,33 @@
-#训练数据为30组时，正常
-#将训练数据的取值范围与测试数据的取值范围一致起来
+'''
+运行环境：Ubuntu19,python3.7.0,paddle1.6.0
+csy 2020-1-10 源于
+https://www.paddlepaddle.org.cn/documentation/docs/zh/beginners_guide/quick_start_cn.html
 
-
+1.fluid.layers.data 改为 fluid.layers.data
+2.测试数据的shape改为(1,4)
+3.生成的训练数据改为20组
+4.生成的x小于10。
+运行结果：
+iter=0,cost=7584.67041015625
+iter=50,cost=nan
+iter=100,cost=nan
+iter=150,cost=nan
+iter=200,cost=nan
+iter=250,cost=nan
+iter=300,cost=nan
+iter=350,cost=nan
+iter=400,cost=nan
+iter=450,cost=nan
+9a+5b+2c+10d=[nan]
+'''
 #加载库
 import paddle.fluid as fluid
 import numpy as np
 #生成数据
 np.random.seed(0)
-outputs = np.random.randint(10, size=(30, 4))
+outputs = np.random.randint(10, size=(20, 4))
 res = []
-for i in range(30):
+for i in range(20):
         # 假设方程式为 y=4a+6b+7c+2d
         y = 4*outputs[i][0]+6*outputs[i][1]+7*outputs[i][2]+2*outputs[i][3]
         res.append([y])
