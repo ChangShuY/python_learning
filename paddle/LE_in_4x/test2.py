@@ -3,10 +3,11 @@
 csy 2020-1-10 源于
 https://www.paddlepaddle.org.cn/documentation/docs/zh/beginners_guide/quick_start_cn.html
 
-1.fluid.layers.data 改为 fluid.layers.data
-2.测试数据的shape改为(1,4)
+1.fluid.layers.data 改为 fluid.data；相应的x的shape改为[-1,4]，y的shape改为[-1,1]。
+2.测试数据的shape改为[1,4]
 3.生成的训练数据改为20组
-运行结果：
+
+学习率=0.05时的运行结果：
 iter=0,cost=1878.2529296875
 iter=50,cost=6270566.5
 iter=100,cost=21211248640.0
@@ -18,6 +19,9 @@ iter=350,cost=9.394261493362e+27
 iter=400,cost=3.1777560548561466e+31
 iter=450,cost=1.0749267084194374e+35
 9a+5b+2c+10d=[-5.5128814e+19]
+
+学习率=0.01时的运行结果：
+
 
 '''
 
@@ -44,7 +48,7 @@ y_predict = fluid.layers.fc(input=x,size=1,act=None)
 cost = fluid.layers.square_error_cost(input=y_predict,label=y)
 avg_cost = fluid.layers.mean(cost)
 #定义优化方法
-sgd_optimizer = fluid.optimizer.SGD(learning_rate=0.05)
+sgd_optimizer = fluid.optimizer.SGD(learning_rate=0.01)
 sgd_optimizer.minimize(avg_cost)
 #参数初始化
 cpu = fluid.CPUPlace()

@@ -3,8 +3,8 @@
 csy 2020-1-10 源于
 https://www.paddlepaddle.org.cn/documentation/docs/zh/beginners_guide/quick_start_cn.html
 
-1.fluid.layers.data 改为 fluid.layers.data
-2.测试数据的shape改为(1,4)
+1.fluid.layers.data 改为 fluid.data；相应的x的shape改为[-1,4]，y的shape改为[-1,1]。
+2.测试数据的shape改为[1,4]
 3.生成的训练数据改为30组
 运行结果：
 iter=0,cost=1425.97265625

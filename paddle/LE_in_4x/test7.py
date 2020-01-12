@@ -3,36 +3,22 @@
 csy 2020-1-10 源于
 https://www.paddlepaddle.org.cn/documentation/docs/zh/beginners_guide/quick_start_cn.html
 
-1.fluid.layers.data 改为 fluid.layers.data
+1.fluid.layers.data 改为 fluid.data
 2.改为用键盘输入数字确定组数，生成训练数据
 3.改为用键盘输入数字确定生成的训练数据范围
 4.改为用键盘输入数字确定随机种子
 5.随机产生浮点数的训练数据
 6.打印出训练数据
-7.调低学习率
-8.增加迭代次数
-9.删除测试部分
+7.不保存模型
+8.删除测试部分
+9.学习率改为0.01
 
-学习率=0.05,运行结果:
+运行结果:
 group  data_range   random_seed 误差随训练次数的变化data_range
 18       5            0                   出现nan
 18       5            1                   出现nan
 18       5            2                   出现nan
 10       5            0                   出现nan
-学习率=0.02,运行结果:
-group  data_range   random_seed   均方差误差
-18       5            0            0.0319
-20       10           1            nan
-学习率=0.01,运行结果:
-group  data_range   random_seed   均方差误差
-20       10           1            nan
-学习率=0.005,运行结果:
-group  data_range   random_seed   均方差误差
-20       10           1            0.0271
-50       10           0            0.0274
-学习率=0.005,迭代1000次。运行结果:
-group  data_range   random_seed   均方差误差
-50       10           0            0.0084
 '''
 
 #!/usr/bin/env python
@@ -74,7 +60,7 @@ cost = fluid.layers.square_error_cost(input=y_predict,label=y)
 avg_cost = fluid.layers.mean(cost)
 
 # 定义优化
-sgd_optimizer = fluid.optimizer.SGD(learning_rate=0.005)
+sgd_optimizer = fluid.optimizer.SGD(learning_rate=0.01)
 sgd_optimizer.minimize(avg_cost)
 
 #参数初始化
@@ -83,13 +69,9 @@ exe = fluid.Executor(cpu)
 exe.run(fluid.default_startup_program())
 
 ## 开始训练，迭代500次
-for i in range(1000):
+for i in range(500):
     outs = exe.run(
         feed={'x':train_data,'y':y_true},
         fetch_list=[y_predict.name,avg_cost.name])
     if i%50==0:
         print('iter={:.0f},cost={}'.format(i,outs[1][0]))
-        
-# 存储训练结果
-params_dirname = 'model'
-fluid.io.save_inference_model(params_dirname,['x'],[y_predict],exe)
