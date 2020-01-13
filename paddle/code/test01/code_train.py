@@ -11,7 +11,7 @@ csy 2020-1-12
 import paddle.fluid as fluid # paddlepaddle 推出的最新的API
 import paddle # 有一些功能是fluid不具备的，还是需要paddle模块
 import numpy as np
-from PIL import Image # Python Image Libary
+from PIL import Image # Python Image Libary，是否需要改为pillow
 import matplotlib.pyplot as plt
 from pylab import mpl
 
@@ -30,9 +30,22 @@ exe = fluid.Executor(place)
 datatype = 'float32'
 # r--只读方式打开;t--文本模式
 with open(path + "data/ocrData.txt", 'rt') as f:
-    a = f.read()
+    a = f.read() #打开标签数据集文件，不知格式是什么样的？
 
-
+'''
+1 (1-bit pixels, black and white, stored with one pixel per byte)
+L (8-bit pixels, black and white)
+P (8-bit pixels, mapped to any other mode using a color palette)
+RGB (3x8-bit pixels, true color)
+RGBA (4x8-bit pixels, true color with transparency mask)
+CMYK (4x8-bit pixels, color separation)
+YCbCr (3x8-bit pixels, color video format)
+Note that this refers to the JPEG, and not the ITU-R BT.2020, standard
+LAB (3x8-bit pixels, the L*a*b color space)
+HSV (3x8-bit pixels, Hue, Saturation, Value color space)
+I (32-bit signed integer pixels)
+F (32-bit floating point pixels)
+'''
 def data_reader():
     def reader():
         for i in range(1, 1501):
