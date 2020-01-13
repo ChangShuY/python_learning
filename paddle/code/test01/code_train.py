@@ -7,6 +7,19 @@ https://www.jianshu.com/p/df98fcc832ed?utm_campaign=haruki&utm_content=note&utm_
 运行环境：Ubuntu19,python3.7.0,paddle1.6.0
 csy 2020-1-12 
 
+数据集介绍：
+data文件夹中从1.jpg--2000.jpg共2000张个位数的验证码图片。
+图片尺寸为：宽=15个像素，高=30个像素
+其中1.jpg--1500.jpg作为训练集
+
+data文件夹中的ocrData.txt是标签文件，其格式为：
+第1个字符        1.jpg的标签‘4’
+第2个字符        2.jpg的标签'8'
+...
+第n个字符        n.jpg的标签（0<n<20001,整数）
+...
+第2000个字符  2000.jpg的标签‘4’
+
 '''
 import paddle.fluid as fluid # paddlepaddle 推出的最新的API
 import paddle # 有一些功能是fluid不具备的，还是需要paddle模块
@@ -33,6 +46,7 @@ with open(path + "data/ocrData.txt", 'rt') as f:
     a = f.read() #打开标签数据集文件，不知格式是什么样的？
 
 '''
+Image有以下几种模式，用字符串表示：
 1 (1-bit pixels, black and white, stored with one pixel per byte)
 L (8-bit pixels, black and white)
 P (8-bit pixels, mapped to any other mode using a color palette)
@@ -47,13 +61,19 @@ I (32-bit signed integer pixels)
 F (32-bit floating point pixels)
 '''
 def data_reader():
+    # 使用PaddlePaddle中reader生成数据集列表
     def reader():
         for i in range(1, 1501):
-            im = Image.open(path + "data/" + str(i) + ".jpg").convert('L')
+            im = Image.open(path + "data/" + str(i) + ".jpg").convert('L') #8bit灰度模式
             im = np.array(im).reshape(1, 30, 15).astype(np.float32)
-            im = im / 255.0 * 2.0 - 1.0
             '''
-            img = paddle.dataset.image.load_image(path + "data/" + str(i+1) + ".jpg")'''
+            图像归一化处理
+            1. 将[0,255]映射到[0,1];
+            2. 放大特征值；
+            3. 平移到以原点为中心[-1,1]
+            '''
+            im = im / 255.0 * 2.0 - 1.0
+
             labelInfo = a[i - 1]
             yield im, labelInfo
 
