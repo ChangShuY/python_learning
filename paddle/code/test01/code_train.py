@@ -67,7 +67,12 @@ I (32-bit signed integer pixels)
 F (32-bit floating point pixels)
 '''
 def data_reader():
-    # 使用PaddlePaddle中reader生成数据集列表
+    '''
+    使用PaddlePaddle中reader生成数据集列表
+    def read() 和 return reader 配对使用，作为样本级的reader接口。
+    https://www.paddlepaddle.org.cn/documentation/docs/zh/user_guides/howto/prepare_data/reader_cn.html#id1
+    函数每次返回一个由 yield 决定的样本数据项。
+    '''
     def reader():
         for i in range(1, 1501):
             im = Image.open(path + "data/" + str(i) + ".jpg").convert('L') #8bit灰度模式
@@ -92,7 +97,11 @@ def data_reader():
 x = fluid.layers.data(name="x", shape=[1, 30, 15], dtype=datatype)
 label = fluid.layers.data(name='label', shape=[1], dtype='int64')
 
+'''
+CNN
+https://www.paddlepaddle.org.cn/documentation/docs/zh/beginners_guide/basics/image_classification/index.html#cnn
 
+'''
 def cnn(ipt):
     print(ipt.shape)
     conv1 = fluid.layers.conv2d(input=ipt,
