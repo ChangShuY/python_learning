@@ -33,6 +33,12 @@ mpl.rcParams['font.sans-serif'] = ['SimHei']  # 设置一种用来显示中文�
 path = "../"
 params_dirname = path + "test01/test.inference.model"
 print("训练后文件夹路径" + params_dirname)
+'''
+若不放心当前位置，可以查看当前路径
+CSY 2020-1-14
+import os
+print(os.getcwd())
+'''
 
 # 参数初始化
 # place = fluid.CUDAPlace(0)
@@ -43,7 +49,7 @@ exe = fluid.Executor(place)
 datatype = 'float32'
 # r--只读方式打开;t--文本模式
 with open(path + "data/ocrData.txt", 'rt') as f:
-    a = f.read() #打开标签数据集文件，不知格式是什么样的？
+    a = f.read() #打开标签数据集文件. a是一个list, a[i]为第i个验证码的标签
 
 '''
 Image有以下几种模式，用字符串表示：
@@ -65,7 +71,9 @@ def data_reader():
     def reader():
         for i in range(1, 1501):
             im = Image.open(path + "data/" + str(i) + ".jpg").convert('L') #8bit灰度模式
+            #im.show() # 查看加载的图片
             im = np.array(im).reshape(1, 30, 15).astype(np.float32)
+            #print(im)
             '''
             图像归一化处理
             1. 将[0,255]映射到[0,1];
