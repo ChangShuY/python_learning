@@ -98,26 +98,28 @@ x = fluid.layers.data(name="x", shape=[1, 30, 15], dtype=datatype)
 label = fluid.layers.data(name='label', shape=[1], dtype='int64')
 
 '''
-CNN
+CNN,卷积神经网络
 https://www.paddlepaddle.org.cn/documentation/docs/zh/beginners_guide/basics/image_classification/index.html#cnn
-
+卷积层：执行卷积操作提取底层到高层的特征，发掘出图片局部关联性质和空间不变性质。
+池化层：执行降采样操作，通过取卷积输出特征图中局部区块的最大值或者均值，可以过滤掉一些不重要的高频信息。
 '''
 def cnn(ipt):
     print(ipt.shape)
+    #二维卷积层 输入和输出格式=NCHW 即批尺寸、通道数、特征高度、特征宽度
     conv1 = fluid.layers.conv2d(input=ipt,
-                                num_filters=32,
-                                filter_size=3,
-                                padding=1,
-                                stride=1,
-                                name='conv1',
-                                act='relu')
-
+                                num_filters=32, #卷积核的个数
+                                filter_size=3, #滤波器大小:高*宽
+                                padding=1, #填充大小:高*宽
+                                stride=1, #滑动步长：高*宽
+                                name='conv1', #网络层输出的前缀标识
+                                act='relu') #激活函数。Relu(x)= max(0,x)
+    #二维空间池化操作
     pool1 = fluid.layers.pool2d(input=conv1,
-                                pool_size=2,
-                                pool_stride=2,
-                                pool_type='max',
+                                pool_size=2, #池化核的大小
+                                pool_stride=2,#池化层的步长
+                                pool_type='max',#池化类型
                                 name='pool1')
-
+    #批正则化层
     bn1 = fluid.layers.batch_norm(input=pool1, name='bn1')
 
     conv2 = fluid.layers.conv2d(input=bn1,
