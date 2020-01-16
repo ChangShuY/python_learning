@@ -297,7 +297,8 @@ def cnn(ipt):
     bn2 = fluid.layers.batch_norm(input=pool2, name='bn2')
 
     fc1 = fluid.layers.fc(input=bn2, size=1024, act='relu', name='fc1')
-
+    
+    # 最终输出10个数
     fc2 = fluid.layers.fc(input=fc1, size=10, act='softmax', name='fc2')
 
     return fc2
