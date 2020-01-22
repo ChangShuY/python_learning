@@ -7,8 +7,18 @@ https://www.jianshu.com/p/9a1628eab8e9
 
 CSY 2020-1-20
 改编自：..\test01\code_train.py
+可视化损失函数的收敛过程
+在行命令窗口执行：
+1. 用python运行本程序
+   python code_train.py
+2. 指定VisualDL的日志文件路径、端口号、IP地址
+   visualdl --logdir ../test03/vdl_log --port 8080 --host 127.0.0.1
+   或
+   visualdl --logdir ./vdl_log --port 8080 --host 127.0.0.1
+3. 查看图形。在浏览器的地址栏中输入IP地址和端口号
+   http://127.0.0.1:8080
 
-运行环境：Ubuntu19,python3.7.0,paddle1.6.0
+运行环境：Ubuntu-19,python-3.7.0,paddle-1.6.0,visualdl-1.3.0
 
 数据集介绍：
 data文件夹中从1.jpg--2000.jpg共2000张个位数的验证码图片。
@@ -30,6 +40,7 @@ import paddle.fluid as fluid # paddlepaddle 推出的最新的API
 import numpy as np
 from PIL import Image
 #import matplotlib.pyplot as plt
+import visualdl # 如果用 from visualdl import LogWriter , 则下面的 visualdl.LogWriter 可简写为 LogWriter
 
 # 提示 Font family ['sans-serif'] not found.
 # 注释掉下面两句
@@ -47,6 +58,17 @@ CSY 2020-1-14
 import os
 print(os.getcwd())
 '''
+
+'''
+定义VisualDL日志文件保存在vdl_log文件夹中
+第一个参数为日志保存路径，
+第二个参数为指定多少次写操作后才从内存写入到硬盘日志文件，越大越占用内存，越小则越占用硬盘IO。
+'''
+logw = visualdl.LogWriter(path + "test03/vdl_log", sync_cycle=100) #定义保存VisualDL日志文件的路径
+
+# 创建scalar图, mode定义了 line0 显示的名称
+with logw.mode('loss') as logger:
+    line0 = logger.scalar('train')
 
 # 参数初始化
 # place = fluid.CUDAPlace(0)
@@ -126,17 +148,18 @@ def cnn(img):
                                 pool_type='max',#池化类型
                                 name='pool1')
     '''
+    FilterSize0 = 3 # 第一个卷积层的卷积核大小
     conv_pool_0 = fluid.nets.simple_img_conv_pool(
         input=img, #格式为[N,C,H,W]
         num_filters=32, #卷积核的个数
-        filter_size=3, #卷积核的大小:高*宽
+        filter_size=FilterSize0, #卷积核的大小:高*宽
         pool_size=2, #池化层的大小：高*宽
-        pool_stride=2 #池化层的步长
+        pool_stride=2, #池化层的步长
         act='relu' #卷积的激活函数。Relu(x)= max(0,x)
         )
     
     #批正则化层
-    bn1 = fluid.layers.batch_norm(input=pool1, name='bn1')
+    bn1 = fluid.layers.batch_norm(input=conv_pool_0, name='bn1')
 
     #第二个卷积-池化层
     '''
@@ -159,7 +182,7 @@ def cnn(img):
         num_filters=50, #卷积核的个数
         filter_size=5, #卷积核的大小:高*宽
         pool_size=2, #池化层的大小：高*宽
-        pool_stride=2 #池化层的步长
+        pool_stride=2, #池化层的步长
         act='relu' #卷积的激活函数。Relu(x)= max(0,x)
         )
     
@@ -193,20 +216,21 @@ prog = fluid.default_startup_program()
 exe.run(prog)
 
 trainNum = 50
-#trainNum = 15
-#accL = []
 for i in range(trainNum):
     for batch_id, data in enumerate(batch_reader()):
         outs = exe.run(
             feed=feeder.feed(data),
             #fetch_list=[label, avg_cost, acc])  # feed为数据表 输入数据和标签数据
             fetch_list=[label, avg_cost, cp0]) 
-        accL.append(outs[2])
 
+    # 打印曲线上的点
+    line0.add_record(i,outs[1]) # 横坐标为i,纵坐标为avg_cost
+    
+    #命令行显示
     #pross = float(i) / trainNum
     #print("当前训练进度百分比为：" + str(pross * 100)[:3].strip(".") + "%"+"准确率为"+str(accL[i]))
-    if i%5==0:
-        print('第'+str(i+1)+'次训练：'+"准确率为"+str(accL[i])+'； 误差为'+str(outs[1]))
+    #if i%5==0:
+        #print('第'+str(i+1)+'次训练：'+"准确率为"+str(accL[i])+'； 误差为'+str(outs[1]))
         
 path = params_dirname
 '''
