@@ -33,6 +33,7 @@ csy 第1次学习改编于 2020-1-23
 import paddle.fluid as fluid
 import numpy as np
 
+# 建立Reader
 def reader():
     def req_one_data():
         for i in range(10):
@@ -43,19 +44,32 @@ def reader():
             yield data_X, data_Y    # 使用yield来返回单条数据
     return req_one_data    # 返回 req_one_data 这个变量名！可不是req_one_data()
 
-x = fluid.data(name="x", shape=[-1,1], dtype="float32") # 第一个参数-1表示每批可以喂任意多的题目。第二个参数1表示每题只有一个已知条件。
-y = fluid.data(name="y", shape=[-1,1], dtype="float32") # 第一个参数-1表示每批可以喂任意多的题目。第二个参数1表示每题只有一个数字表示的答案。
-
-out = fluid.layers.fc(input=x, size=1)
-
-loss = fluid.layers.square_error_cost(input=out, label=y) # 使用均方差损失函数进行计算损失
-avg_loss = fluid.layers.mean(loss)  # 对损失求平均(至于为什么要定义这句，下一节会介绍这个问题)
-
-opt = fluid.optimizer.SGD(learning_rate=0.005)  # 使用随机梯度下降策略进行优化，学习率为0.01
-opt.minimize(avg_loss)  #拿到损失值后，进行反向传播
-
-place = fluid.CPUPlace()  # 初始化CPU运算环境
+# 初始化项目环境
+# fluid.Program 默认有 default_startup_program 和 default_main_program
+# 将 start_program 和 main_program 分开定义后，就可以用 program_guard 设置两个不同的程序空间
+main_program = fluid.Program() # 空白程序框架
+start_program = fluid.Program() # 空白的初始化程序
 start = fluid.default_startup_program()  # 初始化训练框架环境
+
+# 定义 main_program 程序空间的变量，使用startup_program 进行初始化，此处因使用的空白的初始化程序，说明在此程序空间不需要初始化变量
+with fluid.program_guard(main_program=main_program, startup_program=start_program):
+    # 定义张量格式
+    x = fluid.data(name="x", shape=[-1,1], dtype="float32") # 第一个参数-1表示每批可以喂任意多的题目。第二个参数1表示每题只有一个已知条件。
+    y = fluid.data(name="y", shape=[-1,1], dtype="float32") # 第一个参数-1表示每批可以喂任意多的题目。第二个参数1表示每题只有一个数字表示的答案。
+
+    # 定义神经网络
+    out = fluid.layers.fc(input=x, size=1)
+
+    # 定义损失函数
+    loss = fluid.layers.square_error_cost(input=out, label=y) # 使用均方差损失函数进行计算损失
+    avg_loss = fluid.layers.mean(loss)  # 对损失求平均
+
+    # 定义优化器
+    opt = fluid.optimizer.SGD(learning_rate=0.005)  # 使用随机梯度下降策略进行优化，学习率为0.01
+    opt.minimize(avg_loss)  #拿到损失值后，进行反向传播
+
+# 初始化环境
+place = fluid.CPUPlace()  # 在CPU中运算
 exe = fluid.Executor(place)  # 初始化执行器
 exe.run(start)  # 准备执行框架
 
