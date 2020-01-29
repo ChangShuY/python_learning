@@ -80,9 +80,11 @@ exe.run(start_train)  # 准备执行框架
 
 # 定义数据传输格式
 train_reader = fluid.io.batch(reader=reader, batch_size=10) # 原文为paddle.batch
+'''
 train_feeder = fluid.DataFeeder(feed_list=[x, y],
                                 place=place, 
                                 program=main_program) # 默认为 default_main_program
+'''
 
 # 开始训练
 for i in range(500): # 把刚才的5道题的题库，练习100遍！
