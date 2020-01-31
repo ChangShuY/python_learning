@@ -1,3 +1,7 @@
+'''
+CSY 2020-1-31
+收录在博客：https://blog.csdn.net/aLife2P6/article/details/104108872
+'''
 import paddle.fluid as fluid
 import numpy
 
@@ -16,14 +20,14 @@ exe = fluid.Executor(cpu)
 exe.run(fluid.default_startup_program()) # 运行执行器初始化网络参数（采用默认的初始化程序）
 
 for i in range(3): # 连吃三顿
-    print(i)
-    m=0
-    for data in reader():  #从题库里每次抽出一道题
+    print(i) # i表示第几顿
+    m=0 # m表示第几道
+    for data in reader():  #每顿吃10道“菜”，每口只喂1道“菜”
         if(i==2):
-            print(m,data) #显示最后一次喂入的食物（）
+            print(m,data) #显示最后一顿的菜谱
         m+=1
         outs = exe.run( # 加载主程序运行执行器
-        feed={'x':data}, # 从名为x的嘴巴喂入train_data食物
+        feed={'x':data}, # 从名为x的嘴巴喂入reader端上的食物
         fetch_list=[y_predict])
-    # 每次训练的结果
-    print(outs) # 输出列表仅有一个内容，就是out[0]=y_predict
+# 最后的训练结果
+print(outs) # 输出列表仅有一个内容，就是out[0]=y_predict
